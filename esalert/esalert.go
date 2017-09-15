@@ -18,7 +18,7 @@ func IntiConfig(config_dir string) (*Config, error) {
 	config := &Config{
 		Host:"localhsot",
 		Port:"9200",
-		Usrname:"elasticsearch",
+		Username:"elastic",
 		Password:"changeme",
 		Rules: []Rule{},
 	}
@@ -34,7 +34,7 @@ func Run(config *Config) error {
 		return fmt.Errorf("监控规则不能为空!")
 	}
 	esurl = config.Host + ":" + config.Port
-	basicAuth = base64.StdEncoding.EncodeToString([]byte(config.Usrname + ":" + config.Password))
+	basicAuth = base64.StdEncoding.EncodeToString([]byte(config.Username + ":" + config.Password))
 
 	return nil
 }

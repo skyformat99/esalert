@@ -1,28 +1,30 @@
 package esalert
 
 import (
-	"net/http"
-	"encoding/json"
 	"bytes"
-	"github.com/ngaut/log"
+	"encoding/json"
+	"log"
+	"net/http"
 )
 
-type alerter interface {
+// Alerter 报警方式处理接口
+type Alerter interface {
 	alert(res map[string]interface{}) error
 }
 
+// HttpAlert http 报警方式
 type HttpAlert struct {
-	url string
+	url     string
 	request *http.Request
 }
 
-func(httpAlert HttpAlert) alert(res map[string]interface{}) error  {
+func (httpAlert HttpAlert) alert(res map[string]interface{}) error {
 	buffer := &bytes.Buffer{}
-	bytes,_ := json.Marshal(res)
+	bytes, _ := json.Marshal(res)
 	buffer.Write(bytes)
-	_,err := http.Post(httpAlert.url, "application/josn", buffer)
+	_, err := http.Post(httpAlert.url, "application/josn", buffer)
 	if err != nil {
-		log.Error("http alert 请求出路,", err)
+		log.Print("http alert 请求出错,", err)
 	}
 	return nil
 }

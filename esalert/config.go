@@ -1,21 +1,21 @@
 package esalert
 
 type Config struct {
-	Host string
-	Port string
-	Usrname string
+	Host     string
+	Port     string
+	Username string
 	Password string
-	Rules []Rule
+	Rules    []Rule
 }
 
 type Rule struct {
-	Query string
-	Script string
+	Index    string
+	Query    interface{}
+	Hits     int
 	Interval int
-	Alert Alert
+	Alert    Alert
 }
 
 type Alert struct {
 	Type string
-
 }
