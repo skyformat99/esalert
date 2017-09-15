@@ -3,13 +3,12 @@ port: 9200
 username: elastic
 password: changeme
 rules:
-  -
-  index: gateway-*
-  query:
-    exists:
-      field: message.serviceException
-  hits: 10
-  interval: 60
-  alert:
-    type: http
+  - index: gateway-*
+    query:
+      exists:
+        field: message.serviceException
+    hits: 10
+    interval: 60
+    alert:
+      type: http
 

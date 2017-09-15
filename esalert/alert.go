@@ -9,18 +9,17 @@ import (
 
 // Alerter 报警方式处理接口
 type Alerter interface {
-	alert(res map[string]interface{}) error
+	alert(res Hits) error
 }
 
 // HttpAlert http 报警方式
 type HttpAlert struct {
-	url     string
-	request *http.Request
+	url string
 }
 
-func (httpAlert HttpAlert) alert(res map[string]interface{}) error {
+func (httpAlert HttpAlert) alert(hits Hits) error {
 	buffer := &bytes.Buffer{}
-	bytes, _ := json.Marshal(res)
+	bytes, _ := json.Marshal(hits)
 	buffer.Write(bytes)
 	_, err := http.Post(httpAlert.url, "application/josn", buffer)
 	if err != nil {

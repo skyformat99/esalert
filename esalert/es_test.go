@@ -1,7 +1,6 @@
 package esalert
 
 import (
-	"encoding/json"
 	"testing"
 )
 
@@ -15,7 +14,7 @@ var testErRequest = EsRequest{
 
 func TestEsRequest_getUrl(t *testing.T) {
 	url := testErRequest.getUrl()
-	if url != "http://1localhost:9200/logstash-*/_search" {
+	if url != "http://localhost:9200/logstash-*/_search" {
 		t.Error(url)
 	}
 }
@@ -28,8 +27,6 @@ func TestEsRequest_RunQuery(t *testing.T) {
 	if hits.Total < 10 {
 		t.Fail()
 	}
-	res, err := json.Marshal(hits)
-	t.Error("----------", hits.Total, string(res))
 	if err != nil {
 		t.Error(err)
 	}

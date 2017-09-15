@@ -5,17 +5,18 @@ type Config struct {
 	Port     string
 	Username string
 	Password string
-	Rules    []Rule
+	Rules    []RuleConfig
 }
 
-type Rule struct {
+type RuleConfig struct {
 	Index    string
 	Query    interface{}
 	Hits     int
 	Interval int
-	Alert    Alert
+	Alert    AlertConfig
 }
 
-type Alert struct {
+type AlertConfig struct {
 	Type string
+	Url  string
 }
