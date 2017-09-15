@@ -3,9 +3,9 @@ package main
 import (
 	"esalert"
 	"flag"
+	"fmt"
 	"log"
 	"os"
-	"fmt"
 	"os/signal"
 )
 
@@ -17,6 +17,11 @@ func main() {
 	checkErr(err)
 	err = esalert.Run(config)
 	checkErr(err)
+	// 保证主进程在接收到退出信号前不退出
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, os.Kill)
+	s := <-c
+	fmt.Println("Got signal:", s)
 }
 
 func checkErr(err error) {
@@ -24,9 +29,4 @@ func checkErr(err error) {
 		log.Print("解析配置文件出错, ", err)
 		os.Exit(1)
 	}
-	// 保证主进程不退出
-	c := make(chan os.Signal, 1)
-	signal.Notify(c, os.Interrupt, os.Kill)
-	s := <-c
-	fmt.Println("Got signal:", s)
 }
