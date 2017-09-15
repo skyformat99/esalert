@@ -1,7 +1,6 @@
 package esalert
 
 import (
-	"fmt"
 	"io/ioutil"
 	"time"
 
@@ -33,7 +32,7 @@ func IntiConfig(configDir string) (*Config, error) {
 // Run 启动配置参数
 func Run(config *Config) error {
 	if len(config.Rules) == 0 {
-		return fmt.Errorf("监控规则不能为空!")
+		return ConfigError{"rules不能为空"}
 	}
 	rules := []rule{}
 	for _, rule := range config.Rules {
@@ -41,7 +40,7 @@ func Run(config *Config) error {
 			esRequest: getEsRequest(*config, rule),
 			tick:      time.NewTicker(time.Duration(rule.Interval) * time.Second),
 			hits:      rule.Hits,
-			alerter:   getAlert(rule.Alert),
+			alerter:   getAlerts(rule.Alerts),
 		})
 	}
 	for _, rule := range rules {
@@ -50,10 +49,20 @@ func Run(config *Config) error {
 	return nil
 }
 
-func getAlert(alert AlertConfig) Alerter {
-	return HttpAlert{
-		url: alert.Url,
+func getAlerts(alertConfigs []AlertConfig) []Alerter {
+	alerterList := make([]Alerter, len(alertConfigs))
+	for _, alertConfig := range alertConfigs {
+		switch alertConfig.Type {
+		case "http":
+			alerterList = append(alerterList, HTTPAlert{
+				url: alertConfig.URL,
+			})
+		}
 	}
+	if len(alerterList) == 0 {
+		alerterList = append(alerterList, LogAlert{})
+	}
+	return alerterList
 }
 
 func getEsRequest(config Config, rule RuleConfig) EsRequest {
@@ -63,6 +72,6 @@ func getEsRequest(config Config, rule RuleConfig) EsRequest {
 		name:     config.Username,
 		password: config.Password,
 		index:    rule.Index,
-		query:    rule.Query,
+		query:    cleanupMapValue(rule.Query),
 	}
 }

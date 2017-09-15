@@ -1,8 +1,8 @@
 package esalert
 
 import (
-	"time"
 	"log"
+	"time"
 )
 
 type rule interface {
@@ -11,22 +11,24 @@ type rule interface {
 
 type sampleRule struct {
 	esRequest EsRequest
-	tick *time.Ticker
-	hits int
-	alerter Alerter
+	tick      *time.Ticker
+	hits      int
+	alerter   []Alerter
 }
 
-func (rule sampleRule) run()  {
+func (rule sampleRule) run() {
 	go func() {
-		for  {
+		for {
 			select {
-			case <- rule.tick.C:
-				hits,err := rule.esRequest.RunQuery()
+			case <-rule.tick.C:
+				hits, err := rule.esRequest.RunQuery()
 				if err != nil {
 					log.Println(err)
 				}
 				if hits.Total >= rule.hits {
-					rule.alerter.alert(hits)
+					for _, alerter := range rule.alerter {
+						alerter.alert(hits)
+					}
 				}
 			}
 		}

@@ -28,7 +28,7 @@ func (er EsRequest) RunQuery() (Hits, error) {
 		if er.query != nil {
 			body = ToBuffer(er.query)
 		}
-		er.request, err = http.NewRequest("get", er.getUrl(), body)
+		er.request, err = http.NewRequest("get", er.getURL(), body)
 		er.request.SetBasicAuth(er.name, er.password)
 		er.request.Header.Set("Content-Type", "Application/json")
 	}
@@ -49,11 +49,12 @@ func (er EsRequest) RunQuery() (Hits, error) {
 	return res.Hits, nil
 }
 
-// getUrl 获取查询地址
-func (er EsRequest) getUrl() string {
+// getURL 获取查询地址
+func (er EsRequest) getURL() string {
 	return fmt.Sprintf("http://%s:%s/%s/_search", er.host, er.port, er.index)
 }
 
+// Res 查询返回值类型
 type Res struct {
 	Hits Hits `json:"hits"`
 }

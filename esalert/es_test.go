@@ -13,7 +13,7 @@ var testErRequest = EsRequest{
 }
 
 func TestEsRequest_getUrl(t *testing.T) {
-	url := testErRequest.getUrl()
+	url := testErRequest.getURL()
 	if url != "http://localhost:9200/logstash-*/_search" {
 		t.Error(url)
 	}
