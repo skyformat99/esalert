@@ -1,8 +1,8 @@
 package esalert
 
 import (
-	"testing"
 	"log"
+	"testing"
 )
 
 func Test_IntiConfig(t *testing.T) {
@@ -14,7 +14,7 @@ func Test_IntiConfig(t *testing.T) {
 		t.Error("解析出错")
 	}
 	for _, rule := range config.Rules {
-		json, err := QueryToJson(rule)
+		json, err := QueryToJSON(rule)
 		log.Println(string(json), err)
 		if rule.Query == nil {
 			t.Error("解析出错")

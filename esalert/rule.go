@@ -12,6 +12,7 @@ type rule interface {
 type sampleRule struct {
 	esRequest EsRequest
 	tick      *time.Ticker
+	time      int32
 	hits      int
 	alerter   []Alerter
 }

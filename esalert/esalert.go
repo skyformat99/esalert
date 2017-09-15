@@ -38,7 +38,8 @@ func Run(config *Config) error {
 	for _, rule := range config.Rules {
 		rules = append(rules, sampleRule{
 			esRequest: getEsRequest(*config, rule),
-			tick:      time.NewTicker(time.Duration(rule.Interval) * time.Second),
+			tick:      time.NewTicker(time.Duration(rule.Interval.GetSecond()) * time.Second),
+			time:      getTime(rule),
 			hits:      rule.Hits,
 			alerter:   getAlerts(rule.Alerts),
 		})
@@ -47,6 +48,14 @@ func Run(config *Config) error {
 		rule.run()
 	}
 	return nil
+}
+
+func getTime(rule RuleConfig) int32 {
+	res := rule.Time.GetSecond()
+	if res == 0 {
+		res = rule.Interval.GetSecond()
+	}
+	return res
 }
 
 func getAlerts(alertConfigs []AlertConfig) []Alerter {

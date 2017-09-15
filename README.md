@@ -7,14 +7,39 @@ host: locahost      # es host
 port: 9200          # es port 
 username: elastic   # es username
 password: changeme  # es password
+mail:
+  usernmar: "xxx"
+  password: "xxx"
+  smtp_host: "xxx"
+  smtp_port: "345"
+  smtp_ssl: false
+  send_to:
+    - xxx@xx.com
+    - xxx@xx.com
+  from_addr: xxx@xx.com             # 显示发送出去的用户是谁
+  reply_to: xxx@xx.com              # 发送出去的邮件回复给谁
+  tpl_file: "/xx/xx/xx.tpl"         # go template模板文件     tpl_file与content必须存在一个
+  content: "xxx{{total}}xxxx"       # go template模板字符串
+  theme: "xxxx"                     # 邮件主题
 rules:              # 检查规则
-  - index: gateway-*  
+  - name: "xxxxx"   # 没有规则必须有一个唯一的name
+    index: gateway-*  
     query:          # 查询条件，可以使任何符合 es规范的查询条件，我将转化为json字符串放入请求body想es发起请求
       exists:
         field: message.serviceException
     hits: 10        # 当符合条件大于多少条是进行报警
-    interval: 60    # 隔多久发起一次请求
-    alert:          # 报警
-      type: http    # 报警规则
-      url: http://baidu.com
+    interval:       # 隔多久发起一次请求，该字段会根据里面的语义信息转换时间
+      day: 1
+      second: 30
+    time:           # 查询当前时间之前多久的数据，该字段会根据里面的语义信息转换时间
+      hour: 1
+      minute: 2
+    alert:                                  # 报警
+      - type: http                          # http报警规则
+        url: http://baidu.com
+      - type: mail                          # mail报警规则
+        mail:                               # 该配置项参数与外层mail参数一致，该配置优先级高于外层mail配置
+          tpl_file: "/xx/xx/xx.tpl"         # go template模板文件     tpl_file与content必须存在一个
+          content: "xxx{{total}}xxxx"       # go template模板字符串
+          theme: "xxxx"                     # 邮件主题
 ```
