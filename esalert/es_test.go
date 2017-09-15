@@ -7,7 +7,7 @@ import (
 var testErRequest = EsRequest{
 	host:     "localhost",
 	port:     "9200",
-	name:     "elatic",
+	name:     "elastic",
 	password: "changme",
 	index:    "logstash-*",
 }

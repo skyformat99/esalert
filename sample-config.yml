@@ -11,4 +11,4 @@ rules:
     interval: 60
     alert:
       type: http
-
+      url: http://baidu.com
