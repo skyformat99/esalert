@@ -45,3 +45,8 @@ rules:              # 检查规则
           content: "xxx{{total}}xxxx"       # go template模板字符串
           theme: "xxxx"                     # 邮件主题
 ```
+
+# Futures
+* 完善各种规则
+* 使每个运行的rule可管理并可灵活扩充
+* 提供web界面
