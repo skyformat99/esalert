@@ -17,7 +17,7 @@ func ToBuffer(i interface{}) *bytes.Buffer {
 
 // QueryToJSON 转化query为json byte[]
 func QueryToJSON(query interface{}) ([]byte, error) {
-	//query = cleanupMapValue(query)
+	query = cleanupMapValue(query)
 	return json.Marshal(query)
 }
 

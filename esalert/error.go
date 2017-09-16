@@ -8,3 +8,12 @@ type ConfigError struct {
 func (configError ConfigError) Error() string {
 	return configError.message
 }
+
+// RequestError 请求错误
+type RequestError struct {
+	message string
+}
+
+func (requestError RequestError) Error() string {
+	return requestError.message
+}

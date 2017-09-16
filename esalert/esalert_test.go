@@ -14,11 +14,11 @@ func Test_IntiConfig(t *testing.T) {
 		t.Error("解析出错")
 	}
 	for _, rule := range config.Rules {
-		json, err := QueryToJSON(rule)
-		log.Println(string(json), err)
 		if rule.Query == nil {
 			t.Error("解析出错")
 		}
+		json, err := QueryToJSON(rule.Query)
+		log.Println(string(json), err)
 	}
 
 }
