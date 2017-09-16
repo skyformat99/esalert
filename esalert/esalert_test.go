@@ -6,7 +6,7 @@ import (
 )
 
 func Test_IntiConfig(t *testing.T) {
-	config, err := IntiConfig("../sample-config.yml")
+	config, err := IntiConfig("../config.yml")
 	if err != nil {
 		t.Error(err)
 	}
