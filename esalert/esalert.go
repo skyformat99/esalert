@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"time"
 
-	yaml "gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v2"
 )
 
 var esurl, basicAuth string

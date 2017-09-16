@@ -1,4 +1,6 @@
 # esalert
+[![Build Status](https://travis-ci.org/23mf/esalert.svg?branch=master)](https://travis-ci.org/23mf/esalert)
+
 提供查询elasticsearch数据根据规则报警功能
 
 # 超级简单的配置

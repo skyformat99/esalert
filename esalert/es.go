@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
@@ -21,8 +20,7 @@ type EsRequest struct {
 }
 
 // RunQuery 发起请求
-func (er EsRequest) RunQuery() (Hits, error) {
-	var err error
+func (er EsRequest) RunQuery() (hits Hits, err error) {
 	if er.request == nil {
 		var body io.Reader
 		if er.query != nil {
@@ -33,16 +31,19 @@ func (er EsRequest) RunQuery() (Hits, error) {
 		er.request.Header.Set("Content-Type", "Application/json")
 	}
 	if err != nil {
-		return Hits{}, err
+		return
 	}
 	response, err := http.DefaultClient.Do(er.request)
+	if err != nil {
+		return
+	}
 	body, err := ioutil.ReadAll(response.Body)
 	if response.StatusCode != 200 {
-		return Hits{}, fmt.Errorf(string(body))
+		err = RequestError{string(body)}
+		return
 	}
-	log.Println(string(body))
 	if err != nil {
-		return Hits{}, err
+		return
 	}
 	var res Res
 	json.Unmarshal(body, &res)
