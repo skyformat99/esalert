@@ -1,19 +1,30 @@
 package esalert
 
-// ConfigError 配置错误
-type ConfigError struct {
-	message string
+type baseError struct {
+	Message string
 }
 
-func (configError ConfigError) Error() string {
-	return configError.message
+func (baseError baseError) Error() string {
+	return baseError.Message
+}
+
+func (baseError baseError) SetError(error string) {
+	 baseError.Message = error
+}
+
+// ConfigError 配置错误
+type ConfigError struct {
+	Message string
+	baseError
 }
 
 // RequestError 请求错误
 type RequestError struct {
-	message string
+	Message string
+	baseError
 }
 
-func (requestError RequestError) Error() string {
-	return requestError.message
+type NotFoundError struct {
+	Message string
+	baseError
 }

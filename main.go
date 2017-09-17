@@ -3,7 +3,6 @@ package main
 import (
 	"esalert"
 	"flag"
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -21,7 +20,7 @@ func main() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
 	s := <-c
-	fmt.Println("Got signal:", s)
+	log.Println("INFO ","Got signal:", s)
 }
 
 func checkErr(err error) {

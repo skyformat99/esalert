@@ -32,7 +32,7 @@ func IntiConfig(configDir string) (*Config, error) {
 // Run 启动配置参数
 func Run(config *Config) error {
 	if len(config.Rules) == 0 {
-		return ConfigError{"rules不能为空"}
+		return ConfigError{Message:"rules不能为空"}
 	}
 	rules := []rule{}
 	for _, rule := range config.Rules {

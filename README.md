@@ -14,7 +14,6 @@ mail:
   password: "xxx"
   smtp_host: "xxx"
   smtp_port: "345"
-  smtp_ssl: false
   send_to:
     - xxx@xx.com
     - xxx@xx.com
@@ -22,7 +21,7 @@ mail:
   reply_to: xxx@xx.com              # 发送出去的邮件回复给谁
   tpl_file: "/xx/xx/xx.tpl"         # go template模板文件     tpl_file与content必须存在一个
   content: "xxx{{total}}xxxx"       # go template模板字符串
-  theme: "xxxx"                     # 邮件主题
+  subject: "xxxx"                   # 邮件主题
 rules:              # 检查规则
   - name: "xxxxx"   # 没有规则必须有一个唯一的name
     index: gateway-*  
@@ -43,7 +42,7 @@ rules:              # 检查规则
         mail:                               # 该配置项参数与外层mail参数一致，该配置优先级高于外层mail配置
           tpl_file: "/xx/xx/xx.tpl"         # go template模板文件     tpl_file与content必须存在一个
           content: "xxx{{total}}xxxx"       # go template模板字符串
-          theme: "xxxx"                     # 邮件主题
+          subject: "xxxx"                   # 邮件主题
 ```
 
 # Futures

@@ -7,7 +7,6 @@ mail:
   password: "xxx"
   smtp_host: "xxx"
   smtp_port: "345"
-  smtp_ssl: false
   send_to:
     - xxx@xx.com
     - xxx@xx.com

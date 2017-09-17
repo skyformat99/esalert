@@ -16,13 +16,12 @@ type MailConfig struct {
 	Password string
 	SMTPHost string   `yaml:"smtp_host"`
 	SMTPPort string   `yaml:"smtp_port"`
-	SMTPSSL  bool     `yaml:"smtp_ssl"`
 	SendTo   []string `yaml:"send_to"`
 	FromAddr string   `yaml:"from_addr"`
 	ReplyTo  string   `yaml:"reply_to"`
 	TPLFile  string   `yaml:"tpl_file"`
 	Content  string
-	Theme    string
+	Subject  string
 }
 
 // RuleConfig 规则配置

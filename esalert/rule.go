@@ -28,7 +28,7 @@ func (rule sampleRule) run() {
 				}
 				if hits.Total >= rule.hits {
 					for _, alerter := range rule.alerter {
-						alerter.alert(hits)
+						alerter.Alert(hits)
 					}
 				}
 			}
