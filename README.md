@@ -1,5 +1,6 @@
-# esalert
+# esalert                   
 [![Build Status](https://travis-ci.org/23mf/esalert.svg?branch=master)](https://travis-ci.org/23mf/esalert)
+[![Go Report Card](https://goreportcard.com/badge/github.com/23mf/esalert)](https://goreportcard.com/report/github.com/23mf/esalert)
 
 提供查询elasticsearch数据根据规则报警功能
 
