@@ -11,7 +11,7 @@ port: 9200          # es port
 username: elastic   # es username
 password: changeme  # es password
 mail:
-  usernmar: "xxx"
+  username: "xxx"
   password: "xxx"
   smtp_host: "xxx"
   smtp_port: "345"
@@ -36,7 +36,7 @@ rules:              # 检查规则
     time:           # 查询当前时间之前多久的数据，该字段会根据里面的语义信息转换时间
       hour: 1
       minute: 2
-    alert:                                  # 报警
+    alerts:                                  # 报警
       - type: http                          # http报警规则
         url: http://baidu.com
       - type: mail                          # mail报警规则
@@ -48,5 +48,6 @@ rules:              # 检查规则
 
 # Futures
 * 完善各种规则
+* 更加完善的日志记录
 * 使每个运行的rule可管理并可灵活扩充
 * 提供web界面

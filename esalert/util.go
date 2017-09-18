@@ -29,9 +29,15 @@ type Mail struct {
 }
 
 // Send 发送邮件
+// # BUG
+// * 某些不确定情况下可能导致该函数阻塞，等待不确定的一段时间(可能很长，可能一会儿以后)报EOF错误,
+//   跟断点猜测重要应该时golang源码没有超时机制和相关smtp服务器服务器有些问题(telnet客服端模拟也会出现发送HELO没有回复的情况)
 func (mail Mail) Send(to []string, subject string, msg []byte) error {
 	if mail.From == "" {
 		mail.From = mail.Username
+	}
+	if mail.ReplyTo == "" {
+		mail.ReplyTo = mail.From
 	}
 	// 如果msg中夹带空格，msg与header中间需要有一个分行smtp服务器才能识别内容
 	msg = append([]byte("\r\n"), msg...)

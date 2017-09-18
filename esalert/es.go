@@ -39,7 +39,7 @@ func (er EsRequest) RunQuery() (hits Hits, err error) {
 	}
 	body, err := ioutil.ReadAll(response.Body)
 	if response.StatusCode != 200 {
-		err = RequestError{Message:string(body)}
+		err = RequestError{Message: string(body)}
 		return
 	}
 	if err != nil {

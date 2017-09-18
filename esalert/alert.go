@@ -14,7 +14,7 @@ var registerMap = map[string]AlerterCreater{}
 // Register 注册一个AlerterCreater
 func Register(t string, creater AlerterCreater) {
 	t = strings.ToLower(t)
-	_,ok := registerMap[t]
+	_, ok := registerMap[t]
 	if ok {
 		log.Println("WARN ", "已经存在一个该type的creater")
 	}
@@ -118,7 +118,7 @@ func (MailAlert) Create(config Config, alertConfig AlertConfig) (Alerter, error)
 	var template *template.Template
 	if mail.TPLFile == "" {
 		if mail.Content == "" {
-			return nil, ConfigError{Message:"tpl_file || content must exists by mail"}
+			return nil, ConfigError{Message: "tpl_file || content must exists by mail"}
 		}
 		template, err = template.Parse(mail.Content)
 		if err != nil {

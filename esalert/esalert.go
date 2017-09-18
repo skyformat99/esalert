@@ -4,10 +4,25 @@ import (
 	"io/ioutil"
 	"time"
 
+	"context"
+
 	"gopkg.in/yaml.v2"
 )
 
-var esurl, basicAuth string
+// RuleContext 保存各个rule允许的状态
+var RuleContext = map[string]*RuleRunContext{}
+
+// RuleRunContext rule运行的上下文
+// TODO 保存更多rule运行相关状态
+type RuleRunContext struct {
+	ctx        context.Context
+	cancelFunc context.CancelFunc
+}
+
+// Stop 停止某个rule
+func (rrc *RuleRunContext) Stop() {
+	rrc.cancelFunc()
+}
 
 // IntiConfig 根据配置文件路径加载配置
 func IntiConfig(configDir string) (*Config, error) {
@@ -30,22 +45,25 @@ func IntiConfig(configDir string) (*Config, error) {
 }
 
 // Run 启动配置参数
-func Run(config *Config) error {
+func Run(config Config) error {
 	if len(config.Rules) == 0 {
-		return ConfigError{Message:"rules不能为空"}
+		return ConfigError{Message: "rules不能为空"}
 	}
 	rules := []rule{}
 	for _, rule := range config.Rules {
 		rules = append(rules, sampleRule{
-			esRequest: getEsRequest(*config, rule),
+			name:      rule.Name,
+			esRequest: getEsRequest(config, rule),
 			tick:      time.NewTicker(time.Duration(rule.Interval.GetSecond()) * time.Second),
 			time:      getTime(rule),
 			hits:      rule.Hits,
-			alerter:   getAlerts(rule.Alerts),
+			alerter:   getAlerts(config, rule.Alerts),
 		})
 	}
 	for _, rule := range rules {
-		rule.run()
+		ctx, cancelFunc := context.WithCancel(context.Background())
+		rule.run(ctx)
+		RuleContext[rule.Name()] = &RuleRunContext{ctx: ctx, cancelFunc: cancelFunc}
 	}
 	return nil
 }
@@ -58,15 +76,14 @@ func getTime(rule RuleConfig) int32 {
 	return res
 }
 
-func getAlerts(alertConfigs []AlertConfig) []Alerter {
-	alerterList := make([]Alerter, len(alertConfigs))
+func getAlerts(config Config, alertConfigs []AlertConfig) []Alerter {
+	alerterList := make([]Alerter, 0, len(alertConfigs))
 	for _, alertConfig := range alertConfigs {
-		switch alertConfig.Type {
-		case "http":
-			alerterList = append(alerterList, HTTPAlert{
-				url: alertConfig.URL,
-			})
+		alerter, err := CreateAlerter(alertConfig.Type, config, alertConfig)
+		if err != nil {
+			panic(err)
 		}
+		alerterList = append(alerterList, alerter)
 	}
 	if len(alerterList) == 0 {
 		alerterList = append(alerterList, LogAlert{})
@@ -81,6 +98,8 @@ func getEsRequest(config Config, rule RuleConfig) EsRequest {
 		name:     config.Username,
 		password: config.Password,
 		index:    rule.Index,
-		query:    cleanupMapValue(rule.Query),
+		query: struct {
+			Query interface{} `json:"query"`
+		}{Query: cleanupMapValue(rule.Query)},
 	}
 }
